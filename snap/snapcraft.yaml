@@ -1,0 +1,47 @@
+name: crossbar-pypy
+version: 'latest'
+version-script: wget -qO- https://pypi.python.org/pypi/crossbar/json | jq .info.version | sed -e 's/^"//' -e 's/"$//'
+summary: Crossbar.io - Polyglot application router.
+description: |
+  Crossbar.io is a networking platform for distributed and microservice
+  applications. It is feature rich, scalable, robust and secure. Let
+  Crossbar.io take care of the hard parts of messaging so you can focus
+  on your app's features.
+grade: stable
+confinement: strict
+architectures:
+  - build-on: amd64
+  - build-on: i386
+  - build-on: armhf
+  - build-on: s390x
+  - build-on: ppc64el
+
+apps:
+  crossbar-pypy:
+    command: bin/crossbar
+    plugs:
+      - home
+      - network
+      - network-bind
+
+parts:
+  crossbar:
+    plugin: dump
+    source:
+      - on amd64: https://bitbucket.org/pypy/pypy/downloads/pypy3-v6.0.0-linux64.tar.bz2
+      - on i386: https://bitbucket.org/pypy/pypy/downloads/pypy3-v6.0.0-linux32.tar.bz2
+      - on armhf: https://bitbucket.org/pypy/pypy/downloads/pypy3-v6.0.0-linux-armhf-raspbian.tar.bz2
+      - on s390x: https://bitbucket.org/pypy/pypy/downloads/pypy3-v6.0.0-s390x.tar.bz2
+      - on ppc64el: https://bitbucket.org/pypy/pypy/downloads/pypy3-v6.0.0-ppc64le.tar.bz2
+    override-build: |
+      snapcraftctl build
+      wget https://bootstrap.pypa.io/get-pip.py
+      $SNAPCRAFT_PART_INSTALL/bin/pypy3 get-pip.py
+      $SNAPCRAFT_PART_INSTALL/bin/pypy3 -m pip install crossbar
+    build-packages:
+      - gcc
+      - libffi-dev
+      - libssl-dev
+      - make
+      - wget
+      - jq
