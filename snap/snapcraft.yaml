@@ -35,8 +35,7 @@ parts:
       - on ppc64el: https://bitbucket.org/pypy/pypy/downloads/pypy3-v6.0.0-ppc64le.tar.bz2
     override-build: |
       snapcraftctl build
-      wget https://bootstrap.pypa.io/get-pip.py
-      $SNAPCRAFT_PART_INSTALL/bin/pypy3 get-pip.py
+      $SNAPCRAFT_PART_INSTALL/bin/pypy3 -m ensurepip
       $SNAPCRAFT_PART_INSTALL/bin/pypy3 -m pip install crossbar
     build-packages:
       - gcc
