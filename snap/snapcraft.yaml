@@ -13,8 +13,6 @@ architectures:
   - build-on: amd64
   - build-on: i386
   - build-on: armhf
-  - build-on: s390x
-  - build-on: ppc64el
 
 apps:
   crossbar-pypy:
@@ -31,10 +29,14 @@ parts:
       - on amd64: https://bitbucket.org/pypy/pypy/downloads/pypy3-v6.0.0-linux64.tar.bz2
       - on i386: https://bitbucket.org/pypy/pypy/downloads/pypy3-v6.0.0-linux32.tar.bz2
       - on armhf: https://bitbucket.org/pypy/pypy/downloads/pypy3-v6.0.0-linux-armhf-raspbian.tar.bz2
-      - on s390x: https://bitbucket.org/pypy/pypy/downloads/pypy3-v6.0.0-s390x.tar.bz2
-      - on ppc64el: https://bitbucket.org/pypy/pypy/downloads/pypy3-v6.0.0-ppc64le.tar.bz2
     override-build: |
       snapcraftctl build
+      ARCHITECTURE=$(dpkg --print-architecture)
+      if [ "${ARCHITECTURE}" = "armhf" ]; then
+        TEMP_LIB_DIR=$(mktemp -d)
+        ln -s /usr/lib/x86_64-linux-gnu/libffi.so $TEMP_LIB_DIR/libffi.so.5
+        export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$TEMP_LIB_DIR
+      fi
       $SNAPCRAFT_PART_INSTALL/bin/pypy3 -m ensurepip
       $SNAPCRAFT_PART_INSTALL/bin/pypy3 -m pip install crossbar
     build-packages:
@@ -44,3 +46,5 @@ parts:
       - make
       - wget
       - jq
+      - dpkg
+      - coreutils
