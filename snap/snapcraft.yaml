@@ -16,13 +16,19 @@ architectures:
 
 apps:
   crossbar-pypy:
-    command: bin/crossbar
+    command: crossbar-pypy
     plugs:
       - home
       - network
       - network-bind
 
 parts:
+  launcher:
+    plugin: nil
+    override-build: |
+      snapcraftctl build
+      mkdir $SNAPCRAFT_PART_INSTALL/bin
+      cp launch.wrapper $SNAPCRAFT_PART_INSTALL/bin/crossbar-pypy
   crossbar:
     plugin: dump
     source:
