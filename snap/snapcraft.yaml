@@ -34,7 +34,7 @@ parts:
       ARCHITECTURE=$(dpkg --print-architecture)
       if [ "${ARCHITECTURE}" = "armhf" ]; then
         TEMP_LIB_DIR=$(mktemp -d)
-        ln -s /usr/lib/x86_64-linux-gnu/libffi.so $TEMP_LIB_DIR/libffi.so.5
+        ln -s /usr/lib/arm-linux-gnueabihf/libffi.so $TEMP_LIB_DIR/libffi.so.5
         export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$TEMP_LIB_DIR
       fi
       $SNAPCRAFT_PART_INSTALL/bin/pypy3 -m ensurepip
