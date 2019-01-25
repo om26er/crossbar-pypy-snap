@@ -54,3 +54,5 @@ parts:
       - jq
       - dpkg
       - coreutils
+    stage-packages:
+      - libffi-dev
