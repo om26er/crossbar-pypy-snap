@@ -2,7 +2,7 @@
 
 if [ "$SNAP_ARCH" = "armhf" ]; then
     if [ ! -L $SNAP_USER_COMMON/libffi.so.5 ]; then
-        ln -s /usr/lib/arm-linux-gnueabihf/libffi.so $SNAP_USER_COMMON/libffi.so.5
+        ln -s /usr/lib/arm-linux-gnueabihf/libffi.so.6 $SNAP_USER_COMMON/libffi.so.5
     fi
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$SNAP_USER_COMMON
 fi
