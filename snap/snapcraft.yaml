@@ -17,7 +17,7 @@ architectures:
 
 apps:
   crossbar-pypy:
-    command: crossbar-pypy
+    command: launch.wrapper
     plugs:
       - home
       - network
@@ -29,8 +29,6 @@ parts:
     source: .
     prime:
       - launch.wrapper
-    organize:
-      launch.wrapper: bin/crossbar-pypy
   crossbar:
     plugin: dump
     source:
