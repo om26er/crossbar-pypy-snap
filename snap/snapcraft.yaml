@@ -32,6 +32,12 @@ parts:
       - on armhf: https://bitbucket.org/pypy/pypy/downloads/pypy3-v6.0.0-linux-armhf-raspbian.tar.bz2
     override-build: |
       snapcraftctl build
+      ARCHITECTURE=$(dpkg --print-architecture)
+      if [ "${ARCHITECTURE}" = "armhf" ]; then
+        TEMP_LIB_DIR=$(mktemp -d)
+        ln -s /usr/lib/arm-linux-gnueabihf/libffi.so $TEMP_LIB_DIR/libffi.so.5
+        export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$TEMP_LIB_DIR
+      fi
       $SNAPCRAFT_PART_INSTALL/bin/pypy3 -m ensurepip
       $SNAPCRAFT_PART_INSTALL/bin/pypy3 -m pip install crossbar
       $SNAPCRAFT_PART_INSTALL/bin/pypy3 -m compileall -q "$SNAPCRAFT_PRIME"
