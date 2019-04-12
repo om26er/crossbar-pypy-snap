@@ -27,6 +27,8 @@ parts:
   launcher:
     plugin: dump
     source: .
+    stage:
+      - launch.wrapper
     prime:
       - launch.wrapper
   crossbar:
