@@ -1,4 +1,5 @@
 name: crossbar-pypy
+base: core18
 version: 'latest'
 version-script: wget -qO- https://pypi.python.org/pypi/crossbar/json | jq .info.version | sed -e 's/^"//' -e 's/"$//'
 summary: Crossbar.io - Polyglot application router.
@@ -16,19 +17,13 @@ architectures:
 
 apps:
   crossbar-pypy:
-    command: crossbar-pypy
+    command: pypy3 $SNAP/bin/crossbar
     plugs:
       - home
       - network
       - network-bind
 
 parts:
-  launcher:
-    plugin: nil
-    override-build: |
-      snapcraftctl build
-      mkdir $SNAPCRAFT_PART_INSTALL/bin
-      cp launch.wrapper $SNAPCRAFT_PART_INSTALL/bin/crossbar-pypy
   crossbar:
     plugin: dump
     source:
@@ -37,14 +32,11 @@ parts:
       - on armhf: https://bitbucket.org/pypy/pypy/downloads/pypy3-v6.0.0-linux-armhf-raspbian.tar.bz2
     override-build: |
       snapcraftctl build
-      ARCHITECTURE=$(dpkg --print-architecture)
-      if [ "${ARCHITECTURE}" = "armhf" ]; then
-        TEMP_LIB_DIR=$(mktemp -d)
-        ln -s /usr/lib/arm-linux-gnueabihf/libffi.so $TEMP_LIB_DIR/libffi.so.5
-        export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$TEMP_LIB_DIR
-      fi
       $SNAPCRAFT_PART_INSTALL/bin/pypy3 -m ensurepip
       $SNAPCRAFT_PART_INSTALL/bin/pypy3 -m pip install crossbar
+      $SNAPCRAFT_PART_INSTALL/bin/pypy3 -m compileall -q "$SNAPCRAFT_PRIME"
+    stage-packages:
+      - libsnappy1v5
     build-packages:
       - gcc
       - libffi-dev
@@ -54,3 +46,6 @@ parts:
       - jq
       - dpkg
       - coreutils
+      - libbz2-dev
+      - libsnappy-dev
+      - libunwind-dev
