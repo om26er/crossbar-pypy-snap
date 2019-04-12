@@ -17,13 +17,20 @@ architectures:
 
 apps:
   crossbar-pypy:
-    command: pypy3 $SNAP/bin/crossbar
+    command: crossbar-pypy
     plugs:
       - home
       - network
       - network-bind
 
 parts:
+  launcher:
+    plugin: dump
+    source: .
+    prime:
+      - launch.wrapper
+    organize:
+      launch.wrapper: bin/crossbar-pypy
   crossbar:
     plugin: dump
     source:
