@@ -50,6 +50,7 @@ parts:
       $SNAPCRAFT_PART_INSTALL/bin/pypy3 -m compileall -q "$SNAPCRAFT_PRIME"
     stage-packages:
       - libsnappy1v5
+      - libssl1.1
     build-packages:
       - gcc
       - libffi-dev
