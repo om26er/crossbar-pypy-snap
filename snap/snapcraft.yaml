@@ -14,7 +14,6 @@ architectures:
   - build-on: amd64
   - build-on: i386
   - build-on: armhf
-  - build-on: arm64
 
 apps:
   crossbar-pypy:
@@ -38,7 +37,6 @@ parts:
       - on amd64: https://bitbucket.org/pypy/pypy/downloads/pypy3.6-v7.2.0-linux64.tar.bz2
       - on i386: https://bitbucket.org/pypy/pypy/downloads/pypy3.6-v7.2.0-linux32.tar.bz2
       - on armhf: https://bitbucket.org/pypy/pypy/downloads/pypy3-v6.0.0-linux-armhf-raspbian.tar.bz2
-      - on arm64: https://bitbucket.org/pypy/pypy/downloads/pypy3.6-v7.2.0-aarch64.tar.bz2
     override-build: |
       snapcraftctl build
       ARCHITECTURE=$(dpkg --print-architecture)
