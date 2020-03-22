@@ -8,9 +8,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Remove LXD
+      run: sudo apt purge lxd* -y
+
+    - name: Install LXD snap
+      run: sudo snap install lxd
+
+    - name: Setup LXD
+      run: /snap/bin/lxd init --auto
+
+    - name: Install Snapcraft
+      run: snap install snapcraft --classic
+
     - uses: actions/checkout@v2
       with:
         repository: 'crossbario/crossbar'
 
-    - name: Run a one-line script
-      run: ls -la
+    - name: Build snap
+      run: snapcraft --use-lxd
