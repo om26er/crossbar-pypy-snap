@@ -1,6 +1,8 @@
-name: CI
+name: Snap build CI
 on:
   push:
+    branches: [ master ]
+  pull_request:
     branches: [ master ]
 
 jobs:
@@ -8,7 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Remove LXD
+    - uses: actions/checkout@v2
+      with:
+        repository: 'crossbario/crossbar'
+
+    - name: Remove LXD (apt)
       run: sudo apt purge lxd* -y
 
     - name: Install LXD snap
@@ -20,9 +26,11 @@ jobs:
     - name: Install Snapcraft
       run: sudo snap install snapcraft --classic
 
-    - uses: actions/checkout@v2
-      with:
-        repository: 'crossbario/crossbar'
-
-    - name: Build snap
+    - name: Build snap package
       run: sudo snapcraft --use-lxd
+
+    - name: Install the newly built
+      run: sudo snap install crossbar_*.snap
+
+    - name: Check version
+      run: crossbar version
