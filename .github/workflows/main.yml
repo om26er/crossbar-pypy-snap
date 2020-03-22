@@ -15,10 +15,10 @@ jobs:
       run: sudo snap install lxd
 
     - name: Setup LXD
-      run: /snap/bin/lxd init --auto
+      run: sudo /snap/bin/lxd init --auto
 
     - name: Install Snapcraft
-      run: snap install snapcraft --classic
+      run: sudo snap install snapcraft --classic
 
     - uses: actions/checkout@v2
       with:
