@@ -25,4 +25,4 @@ jobs:
         repository: 'crossbario/crossbar'
 
     - name: Build snap
-      run: snapcraft --use-lxd
+      run: sudo snapcraft --use-lxd
