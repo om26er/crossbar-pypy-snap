@@ -30,7 +30,7 @@ jobs:
       run: sudo snapcraft --use-lxd
 
     - name: Install the newly built
-      run: sudo snap install *.snap
+      run: sudo snap install *.snap --dangerous
 
     - name: Check version
       run: crossbar version
