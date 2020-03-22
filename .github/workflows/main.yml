@@ -6,19 +6,20 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  build_install_upload:
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
-      with:
-        repository: 'crossbario/crossbar'
 
     - name: Remove LXD (apt)
       run: sudo apt purge lxd* -y
 
     - name: Install LXD snap
       run: sudo snap install lxd
+
+    - name: Wait for LXD ready
+      run: sudo /snap/bin/lxd waitready
 
     - name: Setup LXD
       run: sudo /snap/bin/lxd init --auto
@@ -32,5 +33,9 @@ jobs:
     - name: Install the newly built
       run: sudo snap install *.snap --dangerous
 
-    - name: Check version
-      run: crossbar version
+    - name: Install trasfer snap to upload artifact
+      run: sudo snap install transfer
+
+    - name: Upload newly built snap
+      run: timeout 180 /snap/bin/transfer $(find . -maxdepth 1 -name *.snap)
+
