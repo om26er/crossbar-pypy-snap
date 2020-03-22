@@ -11,6 +11,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        repository: crossbario/crossbar
 
     - name: Remove LXD (apt)
       run: sudo apt purge lxd* -y
