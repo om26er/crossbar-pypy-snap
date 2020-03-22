@@ -30,7 +30,7 @@ jobs:
       run: sudo snapcraft --use-lxd
 
     - name: Install the newly built
-      run: sudo snap install crossbar_*.snap
+      run: sudo snap install *.snap
 
     - name: Check version
       run: crossbar version
